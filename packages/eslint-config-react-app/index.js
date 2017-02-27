@@ -43,8 +43,7 @@ module.exports = {
 
   settings: {
     'import/ignore': [
-      'node_modules',
-      '\\.(json|css|ico|jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$',
+      'node_modules'
     ],
     'import/extensions': ['.js'],
     'import/resolver': {
@@ -124,6 +123,7 @@ module.exports = {
     'no-this-before-super': 'warn',
     'no-throw-literal': 'warn',
     'no-undef': 'error',
+    'no-restricted-globals': ['error', 'event'],
     'no-unexpected-multiline': 'warn',
     'no-unreachable': 'warn',
     'no-unused-expressions': ['warn', {
@@ -156,6 +156,15 @@ module.exports = {
     'unicode-bom': ['warn', 'never'],
     'use-isnan': 'warn',
     'valid-typeof': 'warn',
+    'no-restricted-properties': ['error', {
+      object: 'require',
+      property: 'ensure',
+      message: 'Please use import() instead. More info: https://webpack.js.org/guides/code-splitting-import/#dynamic-import'
+    }, {
+      object: 'System',
+      property: 'import',
+      message: 'Please use import() instead. More info: https://webpack.js.org/guides/code-splitting-import/#dynamic-import'
+    }],
 
     // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/
 
@@ -190,7 +199,7 @@ module.exports = {
     // https://github.com/yannickcr/eslint-plugin-react/tree/master/docs/rules
     'react/jsx-equals-spacing': ['warn', 'never'],
     'react/jsx-no-duplicate-props': ['warn', { ignoreCase: true }],
-    'react/jsx-no-undef': 'warn',
+    'react/jsx-no-undef': 'error',
     'react/jsx-pascal-case': ['warn', {
       allowAllCaps: true,
       ignore: [],
