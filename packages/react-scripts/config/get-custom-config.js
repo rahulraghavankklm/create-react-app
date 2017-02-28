@@ -24,8 +24,8 @@ function getCustomConfig(prod) {
       }
       return finalConfig;
     }, {
-      presets: [],
-      babelPlugins: [],
+      presets: 'es2015', 'react-app'],
+      babelPlugins: ['recharts', 'lodash'],
       plugins: [],
       loaders: [],
       values: {},
