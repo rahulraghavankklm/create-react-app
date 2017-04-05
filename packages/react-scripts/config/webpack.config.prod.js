@@ -180,7 +180,11 @@ module.exports = {
         // @remove-on-eject-begin
         options: {
           babelrc: false,
-          presets: [require.resolve('babel-preset-react-app')],
+          presets: [
+            ['es2015', { modules: false }],
+            'stage-0',
+            require.resolve('babel-preset-react-app')
+          ],
           plugins: ['recharts', 'lodash', 'material-ui']
         },
         // @remove-on-eject-end
@@ -296,37 +300,66 @@ module.exports = {
     // having to parse `index.html`.
     new ManifestPlugin({
       fileName: 'asset-manifest.json'
+    }),
+    // selectively import bundles
+    // new webpack.IgnorePlugin(/^\.\/locale$/, [/moment$/]),
+    new webpack.ContextReplacementPlugin(/moment[\\/]locale$/, /^\.\/(en)$/),
+    // Webpack Bundler Analyzer
+    new BundleAnalyzerPlugin({
+      // Can be `server`, `static` or `disabled`.
+      // In `server` mode analyzer will start HTTP server to show bundle report.
+      // In `static` mode single HTML file with bundle report will be generated.
+      // In `disabled` mode you can use this plugin to just generate Webpack Stats JSON file by setting `generateStatsFile` to `true`.
+      analyzerMode: 'server',
+      // Host that will be used in `server` mode to start HTTP server.
+      analyzerHost: 'localhost',
+      // Port that will be used in `server` mode to start HTTP server.
+      analyzerPort: 8888,
+      // Path to bundle report file that will be generated in `static` mode.
+      // Relative to bundles output directory.
+      reportFilename: 'report.html',
+      // Automatically open report in default browser
+      openAnalyzer: true,
+      // If `true`, Webpack Stats JSON file will be generated in bundles output directory
+      generateStatsFile: false,
+      // Name of Webpack Stats JSON file that will be generated if `generateStatsFile` is `true`.
+      // Relative to bundles output directory.
+      statsFilename: 'stats.json',
+      // Options for `stats.toJson()` method.
+      // For example you can exclude sources of your modules from stats file with `source: false` option.
+      // See more options here: https://github.com/webpack/webpack/blob/webpack-1/lib/Stats.js#L21
+      statsOptions: null,
+      // Log level. Can be 'info', 'warn', 'error' or 'silent'.
+      logLevel: 'info'
+    }),
+    // webpack bundle analyzer plugin
+    new OfflinePlugin({
+      relativePaths: false,
+      publicPath: '/',
+      // No need to cache .htaccess. See http://mxs.is/googmp,
+      // this is applied before any match in `caches` section
+      excludes: ['.htaccess'],
+      caches: {
+        main: [':rest:'],
+        // All chunks marked as `additional`, loaded after main section
+        // and do not prevent SW to install. Change to `optional` if
+        // do not want them to be preloaded at all (cached only when first loaded)
+        additional: [':externals:'],
+        optional: ['*.chunk.js']
+      },
+      // Response strategy. Whether to use a cache or network first for responses.
+      responseStrategy: 'cache-first',
+      // Cache update strategy.
+      updateStrategy: 'changed',
+      // Tell to OfflinePlugin to generate events for ServiceWorker
+      ServiceWorker: {
+        events: true
+      },
+      // Removes warning for about `additional` section usage
+      safeToUseOptionalCaches: true,
+      AppCache: false,
     })
   ],
-  // selectively import bundles
-  new webpack.IgnorePlugin(/^\.\/locale$/, [/moment$/]),
-  // webpack bundle analyzer plugin
-  new OfflinePlugin({
-    relativePaths: false,
-    publicPath: '/',
-    // No need to cache .htaccess. See http://mxs.is/googmp,
-    // this is applied before any match in `caches` section
-    excludes: ['.htaccess'],
-    caches: {
-      main: [':rest:'],
-      // All chunks marked as `additional`, loaded after main section
-      // and do not prevent SW to install. Change to `optional` if
-      // do not want them to be preloaded at all (cached only when first loaded)
-      additional: [':externals:'],
-      optional: ['*.chunk.js']
-    },
-    // Response strategy. Whether to use a cache or network first for responses.
-    responseStrategy: 'cache-first',
-    // Cache update strategy.
-    updateStrategy: 'changed',
-    // Tell to OfflinePlugin to generate events for ServiceWorker
-    ServiceWorker: {
-      events: true
-    },
-    // Removes warning for about `additional` section usage
-    safeToUseOptionalCaches: true,
-    AppCache: false,
-  })
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.
   node: {
