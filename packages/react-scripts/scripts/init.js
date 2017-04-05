@@ -115,6 +115,10 @@ module.exports = function(appPath, appName, verbose, originalDirectory, template
     cdpath = appPath;
   }
 
+  console.log(chalk.red('Count10 - React Scripts'));
+  console.log(' Custom react scripts for Count10 Project');
+  console.log();
+
   console.log();
   console.log('Success! Created ' + appName + ' at ' + appPath);
   console.log('Inside that directory, you can run several commands:');

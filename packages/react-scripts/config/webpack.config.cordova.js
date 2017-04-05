@@ -34,7 +34,7 @@ var resolve = path.resolve;
 var publicPath = paths.servedPath;
 // Some apps do not use client-side routing with pushState.
 // For these, "homepage" can be set to "." to enable relative asset paths.
-var shouldUseRelativeAssetPaths = publicPath === './';
+var shouldUseRelativeAssetPaths = publicPath === '.';
 // `publicUrl` is just like `publicPath`, but we will provide it to our app
 // as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript.
 // Omit trailing slash as %PUBLIC_URL%/xyz looks better than %PUBLIC_URL%xyz.
@@ -68,7 +68,7 @@ module.exports = {
   bail: true,
   // We generate sourcemaps in production. This is slow but gives good results.
   // You can exclude the *.map files from the build during deployment.
-  devtool: 'source-map',
+  devtool: 'cheap-module-source-map',
   // In production, we only want to load the polyfills and the app code.
   entry: [
     require.resolve('./polyfills'),
@@ -76,7 +76,7 @@ module.exports = {
   ],
   output: {
     // The build folder.
-    path: paths.appBuild,
+    path: paths.cordovaBuild,
     // Generated JS file names (with nested folders).
     // There will be one main bundle, and one file per asynchronous chunk.
     // We don't currently advertise code splitting but Webpack supports it.
@@ -252,7 +252,7 @@ module.exports = {
     // Generates an `index.html` file with the <script> injected.
     new HtmlWebpackPlugin({
       inject: true,
-      template: paths.appHtml,
+      template: paths.cordovaHtml,
       minify: {
         removeComments: true,
         collapseWhitespace: true,

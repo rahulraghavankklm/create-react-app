@@ -18,6 +18,10 @@ var WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeMod
 var getClientEnvironment = require('./env');
 var paths = require('./paths');
 
+var path = require('path');
+var join = path.join;
+var resolve = path.resolve;
+
 // @remove-on-eject-begin
 // `path` is not used after eject - see https://github.com/facebookincubator/create-react-app/issues/1174
 var path = require('path');
@@ -88,6 +92,19 @@ module.exports = {
     // https://github.com/facebookincubator/create-react-app/issues/290
     extensions: ['.js', '.json', '.jsx'],
     alias: {
+
+      'actions': join(paths.appSrc, 'actions'),
+      'business_logic': join(paths.appSrc, 'business_logic'),
+      'constants': join(paths.appSrc, 'constants'),
+      'containers': join(paths.appSrc, 'containers'),
+      'components': join(paths.appSrc, 'components'),
+      'views': join(paths.appSrc, 'views'),
+      'reducers': join(paths.appSrc, 'reducers'),
+      'utils': join(paths.appSrc, 'utils'),
+      'helpers': join(paths.appSrc, 'helpers'),
+      'middleware': join(paths.appSrc, 'middleware'),
+      'styles': join(paths.appSrc, 'styles'),
+
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web'
@@ -175,7 +192,9 @@ module.exports = {
           'style-loader', {
             loader: 'css-loader',
             options: {
-              importLoaders: 1
+              modules: true,
+              importLoaders: 1,
+              localIdentName: '[name]__[local]___[hash:base64:5]'
             }
           }, {
             loader: 'postcss-loader',
