@@ -116,7 +116,7 @@ module.exports = function(appPath, appName, verbose, originalDirectory, template
   }
 
   console.log(chalk.red('Count10 - React Scripts'));
-  console.log(' Custom react scripts for Count10 Project');
+  console.log('Custom react scripts for Count10 Project');
   console.log();
 
   console.log();

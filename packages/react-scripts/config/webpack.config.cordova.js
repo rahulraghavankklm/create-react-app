@@ -181,6 +181,7 @@ module.exports = {
         options: {
           babelrc: false,
           presets: [require.resolve('babel-preset-react-app')],
+          plugins: ['recharts', 'lodash', 'material-ui']
         },
         // @remove-on-eject-end
       },
