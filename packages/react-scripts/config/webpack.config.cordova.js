@@ -185,7 +185,7 @@ module.exports = {
             'stage-0',
             require.resolve('babel-preset-react-app')
           ],
-          plugins: ['recharts', 'lodash', 'material-ui']
+          plugins: ['syntax-dynamic-import', 'recharts', 'lodash', 'material-ui']
         },
         // @remove-on-eject-end
       },
