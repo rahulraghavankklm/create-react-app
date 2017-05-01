@@ -29,7 +29,8 @@ module.exports = function(appPath, appName, verbose, originalDirectory, template
     'start': 'react-scripts start',
     'build': 'react-scripts build',
     'test': 'react-scripts test --env=jsdom',
-    'eject': 'react-scripts eject'
+    'eject': 'react-scripts eject',
+    'cordova': 'react-scripts cordova'
   };
 
   fs.writeFileSync(
@@ -119,6 +120,10 @@ module.exports = function(appPath, appName, verbose, originalDirectory, template
 
   // Change displayed command to yarn instead of yarnpkg
   var displayedCommand = useYarn ? 'yarn' : 'npm';
+
+  console.log(chalk.green('Count10 Mobile- React Scripts'));
+  console.log('Custom react scripts for Count10 Project');
+  console.log();
 
   console.log();
   console.log('Success! Created ' + appName + ' at ' + appPath);

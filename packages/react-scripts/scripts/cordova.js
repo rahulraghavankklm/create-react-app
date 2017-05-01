@@ -12,6 +12,7 @@
 
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.NODE_ENV = 'production';
+process.env.REACT_APP_TARGET = 'cordova';
 
 // Load environment variables from .env file. Suppress warnings using silent
 // if this file is missing. dotenv will never modify any environment variables
@@ -24,7 +25,7 @@ var fs = require('fs-extra');
 var path = require('path');
 var url = require('url');
 var webpack = require('webpack');
-var config = require('../config/webpack.config.cordova');
+var config = require('../config/webpack.config.prod');
 var paths = require('../config/paths');
 var checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 var FileSizeReporter = require('react-dev-utils/FileSizeReporter');
@@ -34,16 +35,16 @@ var printFileSizesAfterBuild = FileSizeReporter.printFileSizesAfterBuild;
 var useYarn = fs.existsSync(paths.yarnLockFile);
 
 // Warn and crash if required files are missing
-if (!checkRequiredFiles([paths.cordovaHtml, paths.appIndexJs])) {
+if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
   process.exit(1);
 }
 
 // First, read the current file sizes in build directory.
 // This lets us display how much they changed later.
-measureFileSizesBeforeBuild(paths.cordovaBuild).then(previousFileSizes => {
+measureFileSizesBeforeBuild(paths.appBuild).then(previousFileSizes => {
   // Remove all content but keep the directory so that
   // if you're in it, you don't end up in Trash
-  fs.emptyDirSync(paths.cordovaBuild);
+  fs.emptyDirSync(paths.appBuild);
 
   // Start the webpack build
   build(previousFileSizes);
@@ -64,7 +65,7 @@ function printErrors(summary, errors) {
 
 // Create the production build and print the deployment instructions.
 function build(previousFileSizes) {
-  console.log('Creating an optimized production cordova build...');
+  console.log('Creating an optimized production build...');
   webpack(config).run((err, stats) => {
     if (err) {
       printErrors('Failed to compile.', [err]);
@@ -98,7 +99,7 @@ function build(previousFileSizes) {
       console.log('The project was built assuming it is hosted at ' + chalk.green(publicPathname) + '.');
       console.log('You can control this with the ' + chalk.green('homepage') + ' field in your '  + chalk.cyan('package.json') + '.');
       console.log();
-      console.log('The ' + chalk.cyan('cordova-build') + ' folder is ready to be deployed.');
+      console.log('The ' + chalk.cyan('build') + ' folder is ready to be deployed.');
       console.log('To publish it at ' + chalk.green(publicUrl) + ', run:');
       // If script deploy has been added to package.json, skip the instructions
       if (typeof appPackage.scripts.deploy === 'undefined') {
@@ -114,8 +115,8 @@ function build(previousFileSizes) {
         console.log('    ' + chalk.dim('// ...'));
         console.log('    ' + chalk.yellow('"scripts"') + ': {');
         console.log('      ' + chalk.dim('// ...'));
-        console.log('      ' + chalk.yellow('"predeploy"') + ': ' + chalk.yellow('"npm run cordova",'));
-        console.log('      ' + chalk.yellow('"deploy"') + ': ' + chalk.yellow('"gh-pages -d cordova"'));
+        console.log('      ' + chalk.yellow('"predeploy"') + ': ' + chalk.yellow('"npm run build",'));
+        console.log('      ' + chalk.yellow('"deploy"') + ': ' + chalk.yellow('"gh-pages -d build"'));
         console.log('    }');
         console.log();
         console.log('Then run:');
@@ -128,7 +129,7 @@ function build(previousFileSizes) {
       console.log('The project was built assuming it is hosted at ' + chalk.green(publicPath) + '.');
       console.log('You can control this with the ' + chalk.green('homepage') + ' field in your '  + chalk.cyan('package.json') + '.');
       console.log();
-      console.log('The ' + chalk.cyan('cordova-build') + ' folder is ready to be deployed.');
+      console.log('The ' + chalk.cyan('build') + ' folder is ready to be deployed.');
       console.log();
     } else {
       if (publicUrl) {
@@ -146,7 +147,7 @@ function build(previousFileSizes) {
         console.log();
       }
       var build = path.relative(process.cwd(), paths.appBuild);
-      console.log('The ' + chalk.cyan(cordovaBuild) + ' folder is ready to be deployed.');
+      console.log('The ' + chalk.cyan(build) + ' folder is ready to be deployed.');
       console.log('You may serve it with a static server:');
       console.log();
       if (useYarn) {
@@ -154,15 +155,15 @@ function build(previousFileSizes) {
       } else {
         console.log(`  ${chalk.cyan('npm')} install -g serve`);
       }
-      console.log(`  ${chalk.cyan('serve')} -s cordova-build`);
+      console.log(`  ${chalk.cyan('serve')} -s build`);
       console.log();
     }
   });
 }
 
 function copyPublicFolder() {
-  fs.copySync(paths.cordovaPublic, paths.cordovaBuild, {
+  fs.copySync(paths.appPublic, paths.appBuild, {
     dereference: true,
-    filter: file => file !== paths.cordovaHtml
+    filter: file => file !== paths.appHtml
   });
 }

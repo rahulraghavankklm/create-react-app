@@ -1,7 +1,7 @@
 {
-  "name": "count10-react-scripts",
+  "name": "count10-mobile-react-scripts",
   "version": "0.9.5-01",
-  "description": "Count10 Web - Custom Configuration and scripts for Create React App.",
+  "description": "Count10 Mobile - Custom Configuration and scripts for Create React App.",
   "repository": "rahulraghavankklm/create-react-app",
   "license": "BSD-3-Clause",
   "engines": {
