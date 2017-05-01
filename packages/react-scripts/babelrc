@@ -1,3 +1,13 @@
 {
-  "presets": ["react-app"]
+  "plugins": [
+    "syntax-dynamic-import",
+    "recharts",
+    "lodash",
+    "material-ui"
+  ],
+  "presets": [
+    ["es2015", { modules: false }],
+     "stage-1",
+    "react-app"
+  ]
 }

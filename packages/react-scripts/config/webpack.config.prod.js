@@ -19,10 +19,17 @@ var InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 var paths = require('./paths');
 var getClientEnvironment = require('./env');
 
+var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+var OfflinePlugin = require('offline-plugin');
+
 // @remove-on-eject-begin
 // `path` is not used after eject - see https://github.com/facebookincubator/create-react-app/issues/1174
-var path = require('path');
+// var path = require('path');
 // @remove-on-eject-end
+
+var path = require('path');
+var join = path.join;
+var resolve = path.resolve;
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
@@ -95,6 +102,20 @@ module.exports = {
     // https://github.com/facebookincubator/create-react-app/issues/290
     extensions: ['.js', '.json', '.jsx', ''],
     alias: {
+
+      'actions': join(paths.appSrc, 'actions'),
+      'business_logic': join(paths.appSrc, 'business_logic'),
+      'constants': join(paths.appSrc, 'constants'),
+      'containers': join(paths.appSrc, 'containers'),
+      'components': join(paths.appSrc, 'components'),
+      'views': join(paths.appSrc, 'views'),
+      'reducers': join(paths.appSrc, 'reducers'),
+      'utils': join(paths.appSrc, 'utils'),
+      'helpers': join(paths.appSrc, 'helpers'),
+      'middleware': join(paths.appSrc, 'middleware'),
+      'styles': join(paths.appSrc, 'styles'),
+      'routes': join(paths.appSrc, 'routes'),
+
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web'
@@ -147,11 +168,16 @@ module.exports = {
       {
         test: /\.(js|jsx)$/,
         include: paths.appSrc,
-        loader: 'babel',
+        loader: 'babel-loader',
         // @remove-on-eject-begin
-        query: {
+        options: {
           babelrc: false,
-          presets: [require.resolve('babel-preset-react-app')],
+          presets: [
+            ['es2015', { modules: false }],
+            'stage-1',
+            require.resolve('babel-preset-react-app')
+          ],
+          plugins: ['syntax-dynamic-import', 'recharts', 'lodash', 'material-ui']
         },
         // @remove-on-eject-end
       },
@@ -169,11 +195,36 @@ module.exports = {
       // in the main CSS file.
       {
         test: /\.css$/,
-        loader: ExtractTextPlugin.extract(
-          'style',
-          'css?importLoaders=1!postcss',
-          extractTextPluginOptions
-        )
+        loader: ExtractTextPlugin.extract(Object.assign({
+          fallback: 'style-loader',
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+                modules: true,
+                importLoaders: 1,
+                localIdentName: '[hash:base64:5]'
+              }
+            }, {
+              loader: 'postcss-loader',
+              options: {
+                ident: 'postcss', // https://webpack.js.org/guides/migrating/#complex-options
+                plugins: function () {
+                  return [
+                    autoprefixer({
+                      browsers: [
+                        '>1%',
+                        'last 4 versions',
+                        'Firefox ESR',
+                        'not ie < 9', // React doesn't support IE8 anyway
+                      ]
+                    })
+                  ]
+                }
+              }
+            }
+          ]
+        }, extractTextPluginOptions))
         // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
       },
       // JSON is not enabled by default in Webpack but both Node and Browserify
@@ -270,6 +321,64 @@ module.exports = {
     // having to parse `index.html`.
     new ManifestPlugin({
       fileName: 'asset-manifest.json'
+    }),
+    // selectively import bundles
+    // new webpack.IgnorePlugin(/^\.\/locale$/, [/moment$/]),
+    new webpack.ContextReplacementPlugin(/moment[\\/]locale$/, /^\.\/(en)$/),
+    // Webpack Bundler Analyzer
+    new BundleAnalyzerPlugin({
+      // Can be `server`, `static` or `disabled`.
+      // In `server` mode analyzer will start HTTP server to show bundle report.
+      // In `static` mode single HTML file with bundle report will be generated.
+      // In `disabled` mode you can use this plugin to just generate Webpack Stats JSON file by setting `generateStatsFile` to `true`.
+      analyzerMode: 'server',
+      // Host that will be used in `server` mode to start HTTP server.
+      analyzerHost: 'localhost',
+      // Port that will be used in `server` mode to start HTTP server.
+      analyzerPort: 8888,
+      // Path to bundle report file that will be generated in `static` mode.
+      // Relative to bundles output directory.
+      reportFilename: 'report.html',
+      // Automatically open report in default browser
+      openAnalyzer: true,
+      // If `true`, Webpack Stats JSON file will be generated in bundles output directory
+      generateStatsFile: false,
+      // Name of Webpack Stats JSON file that will be generated if `generateStatsFile` is `true`.
+      // Relative to bundles output directory.
+      statsFilename: 'stats.json',
+      // Options for `stats.toJson()` method.
+      // For example you can exclude sources of your modules from stats file with `source: false` option.
+      // See more options here: https://github.com/webpack/webpack/blob/webpack-1/lib/Stats.js#L21
+      statsOptions: null,
+      // Log level. Can be 'info', 'warn', 'error' or 'silent'.
+      logLevel: 'info'
+    }),
+    // webpack bundle analyzer plugin
+    new OfflinePlugin({
+      relativePaths: false,
+      publicPath: '/',
+      // No need to cache .htaccess. See http://mxs.is/googmp,
+      // this is applied before any match in `caches` section
+      excludes: ['.htaccess'],
+      caches: {
+        main: [':rest:'],
+        // All chunks marked as `additional`, loaded after main section
+        // and do not prevent SW to install. Change to `optional` if
+        // do not want them to be preloaded at all (cached only when first loaded)
+        additional: [':externals:'],
+        optional: ['*.chunk.js']
+      },
+      // Response strategy. Whether to use a cache or network first for responses.
+      responseStrategy: 'cache-first',
+      // Cache update strategy.
+      updateStrategy: 'changed',
+      // Tell to OfflinePlugin to generate events for ServiceWorker
+      ServiceWorker: {
+        events: true
+      },
+      // Removes warning for about `additional` section usage
+      safeToUseOptionalCaches: true,
+      AppCache: false,
     })
   ],
   // Some libraries import Node modules but don't use them in the browser.
