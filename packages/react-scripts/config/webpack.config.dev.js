@@ -21,8 +21,13 @@ var paths = require('./paths');
 
 // @remove-on-eject-begin
 // `path` is not used after eject - see https://github.com/facebookincubator/create-react-app/issues/1174
-var path = require('path');
+// var path = require('path');
 // @remove-on-eject-end
+
+var path = require('path');
+var join = path.join;
+var resolve = path.resolve;
+
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
@@ -91,6 +96,20 @@ module.exports = {
     // https://github.com/facebookincubator/create-react-app/issues/290
     extensions: ['.js', '.json', '.jsx', ''],
     alias: {
+
+      'actions': join(paths.appSrc, 'actions'),
+      'business_logic': join(paths.appSrc, 'business_logic'),
+      'constants': join(paths.appSrc, 'constants'),
+      'containers': join(paths.appSrc, 'containers'),
+      'components': join(paths.appSrc, 'components'),
+      'views': join(paths.appSrc, 'views'),
+      'reducers': join(paths.appSrc, 'reducers'),
+      'utils': join(paths.appSrc, 'utils'),
+      'helpers': join(paths.appSrc, 'helpers'),
+      'middleware': join(paths.appSrc, 'middleware'),
+      'styles': join(paths.appSrc, 'styles'),
+      'routes': join(paths.appSrc, 'routes'),
+
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web'
@@ -149,11 +168,12 @@ module.exports = {
       {
         test: /\.(js|jsx)$/,
         include: paths.appSrc,
-        loader: 'babel',
-        query: {
+        loader: 'babel-loader',
+        options: {
           // @remove-on-eject-begin
           babelrc: false,
           presets: [require.resolve('babel-preset-react-app')],
+          plugins: ['syntax-dynamic-import']
           // @remove-on-eject-end
           // This is a feature of `babel-loader` for webpack (not Babel itself).
           // It enables caching results in ./node_modules/.cache/babel-loader/
@@ -168,7 +188,33 @@ module.exports = {
       // in development "style" loader enables hot editing of CSS.
       {
         test: /\.css$/,
-        loader: 'style!css?importLoaders=1!postcss'
+        use: [
+          'style-loader', {
+            loader: 'css-loader',
+            options: {
+              modules: true,
+              importLoaders: 1,
+              localIdentName: '[name]__[local]___[hash:base64:5]'
+            }
+          }, {
+            loader: 'postcss-loader',
+            options: {
+              ident: 'postcss', // https://webpack.js.org/guides/migrating/#complex-options
+              plugins: function () {
+                return [
+                  autoprefixer({
+                    browsers: [
+                      '>1%',
+                      'last 4 versions',
+                      'Firefox ESR',
+                      'not ie < 9', // React doesn't support IE8 anyway
+                    ]
+                  })
+                ]
+              }
+            }
+          }
+        ]
       },
       // JSON is not enabled by default in Webpack but both Node and Browserify
       // allow it implicitly so we also enable it.
