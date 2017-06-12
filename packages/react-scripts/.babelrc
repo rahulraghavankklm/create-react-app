@@ -3,7 +3,13 @@
     "syntax-dynamic-import",
     "recharts",
     "lodash",
-    "material-ui"
+    "material-ui",
+    "transform-imports", {
+      "redux-form": {
+        "transform": "redux-form/es/${member}",
+        "preventFullImport": true
+      }
+    }
   ],
   "presets": [
     ["es2015", { modules: false }],

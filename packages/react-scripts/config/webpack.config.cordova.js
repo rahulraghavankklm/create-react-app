@@ -185,8 +185,19 @@ module.exports = {
             'stage-0',
             require.resolve('babel-preset-react-app')
           ],
-          plugins: ['syntax-dynamic-import', 'recharts', 'lodash', 'material-ui']
-        },
+          plugins: [
+            'syntax-dynamic-import',
+            'recharts',
+            'lodash',
+            'material-ui',
+            'transform-imports', {
+            'redux-form': {
+              'transform': 'redux-form/es/${member}',
+              'preventFullImport': true
+            }
+          }
+        ]
+      },
         // @remove-on-eject-end
       },
       // The notation here is somewhat confusing.
