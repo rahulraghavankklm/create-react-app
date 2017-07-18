@@ -20,7 +20,8 @@ const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+  .BundleAnalyzerPlugin;
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
 
@@ -102,17 +103,17 @@ module.exports = {
     // for React Native Web.
     extensions: ['.web.js', '.js', '.json', '.web.jsx', '.jsx'],
     alias: {
-      'actions': join(paths.appSrc, 'actions'),
-      'business_logic': join(paths.appSrc, 'business_logic'),
-      'constants': join(paths.appSrc, 'constants'),
-      'containers': join(paths.appSrc, 'containers'),
-      'components': join(paths.appSrc, 'components'),
-      'views': join(paths.appSrc, 'views'),
-      'reducers': join(paths.appSrc, 'reducers'),
-      'utils': join(paths.appSrc, 'utils'),
-      'helpers': join(paths.appSrc, 'helpers'),
-      'middleware': join(paths.appSrc, 'middleware'),
-      'styles': join(paths.appSrc, 'styles'),
+      actions: join(paths.appSrc, 'actions'),
+      business_logic: join(paths.appSrc, 'business_logic'),
+      constants: join(paths.appSrc, 'constants'),
+      containers: join(paths.appSrc, 'containers'),
+      components: join(paths.appSrc, 'components'),
+      views: join(paths.appSrc, 'views'),
+      reducers: join(paths.appSrc, 'reducers'),
+      utils: join(paths.appSrc, 'utils'),
+      helpers: join(paths.appSrc, 'helpers'),
+      middleware: join(paths.appSrc, 'middleware'),
+      styles: join(paths.appSrc, 'styles'),
       // @remove-on-eject-begin
       // Resolve Babel runtime relative to react-scripts.
       // It usually still works on npm 3 without this but it would be
@@ -196,16 +197,22 @@ module.exports = {
                 'recharts',
                 'lodash',
                 'material-ui',
-                ['transform-react-remove-prop-types',{
-                  mode: 'wrap',
-                  removeImport: true
-                }],
-                ['transform-imports', {
-                  'redux-form': {
-                    'transform': 'redux-form/es/${member}',
-                    'preventFullImport': true
-                  }
-                }]
+                [
+                  'transform-react-remove-prop-types',
+                  {
+                    mode: 'remove',
+                    removeImport: true,
+                  },
+                ],
+                [
+                  'transform-imports',
+                  {
+                    'redux-form': {
+                      transform: 'redux-form/es/${member}',
+                      preventFullImport: true,
+                    },
+                  },
+                ],
               ],
               // @remove-on-eject-end
               compact: true,
@@ -237,7 +244,7 @@ module.exports = {
                         minimize: true,
                         sourceMap: true,
                         modules: true,
-                        localIdentName: '[hash:base64:5]'
+                        localIdentName: '[hash:base64:5]',
                       },
                     },
                     {
@@ -381,37 +388,36 @@ module.exports = {
     // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
     // You can remove this if you don't use Moment.js:
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new webpack.ContextReplacementPlugin(/moment[\\/]locale$/, /^\.\/(en)$/),
+    // Webpack Bundler Analyzer
+    new BundleAnalyzerPlugin({
+      // Can be `server`, `static` or `disabled`.
+      // In `server` mode analyzer will start HTTP server to show bundle report.
+      // In `static` mode single HTML file with bundle report will be generated.
+      // In `disabled` mode you can use this plugin to just generate Webpack Stats JSON file by setting `generateStatsFile` to `true`.
+      analyzerMode: 'server',
+      // Host that will be used in `server` mode to start HTTP server.
+      analyzerHost: 'localhost',
+      // Port that will be used in `server` mode to start HTTP server.
+      analyzerPort: 8888,
+      // Path to bundle report file that will be generated in `static` mode.
+      // Relative to bundles output directory.
+      reportFilename: 'report.html',
+      // Automatically open report in default browser
+      openAnalyzer: true,
+      // If `true`, Webpack Stats JSON file will be generated in bundles output directory
+      generateStatsFile: false,
+      // Name of Webpack Stats JSON file that will be generated if `generateStatsFile` is `true`.
+      // Relative to bundles output directory.
+      statsFilename: 'stats.json',
+      // Options for `stats.toJson()` method.
+      // For example you can exclude sources of your modules from stats file with `source: false` option.
+      // See more options here: https://github.com/webpack/webpack/blob/webpack-1/lib/Stats.js#L21
+      statsOptions: null,
+      // Log level. Can be 'info', 'warn', 'error' or 'silent'.
+      logLevel: 'info',
+    }),
   ],
-  // new webpack.IgnorePlugin(/^\.\/locale$/, [/moment$/]),
-  new webpack.ContextReplacementPlugin(/moment[\\/]locale$/, /^\.\/(en)$/),
-  // Webpack Bundler Analyzer
-  new BundleAnalyzerPlugin({
-    // Can be `server`, `static` or `disabled`.
-    // In `server` mode analyzer will start HTTP server to show bundle report.
-    // In `static` mode single HTML file with bundle report will be generated.
-    // In `disabled` mode you can use this plugin to just generate Webpack Stats JSON file by setting `generateStatsFile` to `true`.
-    analyzerMode: 'server',
-    // Host that will be used in `server` mode to start HTTP server.
-    analyzerHost: 'localhost',
-    // Port that will be used in `server` mode to start HTTP server.
-    analyzerPort: 8888,
-    // Path to bundle report file that will be generated in `static` mode.
-    // Relative to bundles output directory.
-    reportFilename: 'report.html',
-    // Automatically open report in default browser
-    openAnalyzer: true,
-    // If `true`, Webpack Stats JSON file will be generated in bundles output directory
-    generateStatsFile: false,
-    // Name of Webpack Stats JSON file that will be generated if `generateStatsFile` is `true`.
-    // Relative to bundles output directory.
-    statsFilename: 'stats.json',
-    // Options for `stats.toJson()` method.
-    // For example you can exclude sources of your modules from stats file with `source: false` option.
-    // See more options here: https://github.com/webpack/webpack/blob/webpack-1/lib/Stats.js#L21
-    statsOptions: null,
-    // Log level. Can be 'info', 'warn', 'error' or 'silent'.
-    logLevel: 'info'
-  }),
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.
   node: {

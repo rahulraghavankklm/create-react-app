@@ -39,11 +39,10 @@ module.exports = function(
 
   // Setup the script rules
   appPackage.scripts = {
-    'start': 'react-scripts start',
-    'build': 'react-scripts build',
-    'test': 'react-scripts test --env=jsdom',
-    'eject': 'react-scripts eject',
-    'cordova': 'react-scripts cordova'
+    start: 'react-scripts start',
+    build: 'react-scripts build',
+    test: 'react-scripts test --env=jsdom',
+    eject: 'react-scripts eject',
   };
 
   fs.writeFileSync(
@@ -143,7 +142,7 @@ module.exports = function(
     cdpath = appPath;
   }
 
-  console.log(chalk.red('Count10 - React Scripts for Mobile App'));
+  console.log(chalk.red('Count10 - React Scripts for Web App'));
   console.log('Custom react scripts for Count10 Project');
   console.log();
 
