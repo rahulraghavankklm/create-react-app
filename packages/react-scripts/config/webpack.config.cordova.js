@@ -72,7 +72,7 @@ module.exports = {
   entry: [require.resolve('./polyfills'), paths.appIndexJs],
   output: {
     // The build folder.
-    path: paths.appBuild,
+    path: paths.cordovaBuild,
     // Generated JS file names (with nested folders).
     // There will be one main bundle, and one file per asynchronous chunk.
     // We don't currently advertise code splitting but Webpack supports it.
@@ -204,15 +204,15 @@ module.exports = {
                     removeImport: true,
                   },
                 ],
-                [
-                  'transform-imports',
-                  {
-                    'redux-form': {
-                      transform: 'redux-form/es/${member}',
-                      preventFullImport: true,
-                    },
-                  },
-                ],
+                // [
+                //   'transform-imports',
+                //   {
+                //     'redux-form': {
+                //       transform: 'redux-form/es/${member}',
+                //       preventFullImport: true,
+                //     },
+                //   },
+                // ],
               ],
               // @remove-on-eject-end
               compact: true,
@@ -305,7 +305,7 @@ module.exports = {
     // Generates an `index.html` file with the <script> injected.
     new HtmlWebpackPlugin({
       inject: true,
-      template: paths.appHtml,
+      template: paths.cordovaHtml,
       minify: {
         removeComments: true,
         collapseWhitespace: true,
