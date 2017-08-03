@@ -204,15 +204,15 @@ module.exports = {
                     removeImport: true,
                   },
                 ],
-                [
-                  'transform-imports',
-                  {
-                    'redux-form': {
-                      transform: 'redux-form/es/${member}',
-                      preventFullImport: true,
-                    },
-                  },
-                ],
+                // [
+                //   'transform-imports',
+                //   {
+                //     'redux-form': {
+                //       transform: 'redux-form/es/${member}',
+                //       preventFullImport: true,
+                //     },
+                //   },
+                // ],
               ],
               // @remove-on-eject-end
               compact: true,
