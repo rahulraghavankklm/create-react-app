@@ -296,6 +296,45 @@ module.exports = {
     ],
   },
   plugins: [
+    // CommonChunksPlugin
+    // The CommonsChunkPlugin is an opt-in feature that creates a separate file
+    // (known as a chunk), consisting of common modules shared between multiple
+    // entry points. By separating common modules from bundles, the resulting chunked
+    // file can be loaded once initially, and stored in cache for later use.
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'react-build',
+      minChunks(module, count) {
+        const context = module.context;
+        return (
+          context &&
+          (context.indexOf('node_modules\\react\\') >= 0 ||
+            context.indexOf('node_modules\\react-dom\\') >= 0)
+        );
+      },
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'manifest',
+    }),
+    //catch all - anything used in more than one place
+    new webpack.optimize.CommonsChunkPlugin({
+      async: 'used-twice',
+      minChunks(module, count) {
+        return count >= 2;
+      },
+    }),
+    //specifically bundle these large things
+    new webpack.optimize.CommonsChunkPlugin({
+      async: 'shared',
+      minChunks(module, count) {
+        const context = module.context;
+        const targets = ['moment', 'material-ui', 'flexboxgrid'];
+        return (
+          context &&
+          context.indexOf('node_modules') >= 0 &&
+          targets.find(t => new RegExp('\\\\' + t + '\\\\', 'i').test(context))
+        );
+      },
+    }),
     // Makes some environment variables available in index.html.
     // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
     // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
