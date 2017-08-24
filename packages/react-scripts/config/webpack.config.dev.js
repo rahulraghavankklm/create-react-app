@@ -101,17 +101,19 @@ module.exports = {
     // for React Native Web.
     extensions: ['.web.js', '.js', '.json', '.web.jsx', '.jsx'],
     alias: {
-      'actions': join(paths.appSrc, 'actions'),
-      'business_logic': join(paths.appSrc, 'business_logic'),
-      'constants': join(paths.appSrc, 'constants'),
-      'containers': join(paths.appSrc, 'containers'),
-      'components': join(paths.appSrc, 'components'),
-      'views': join(paths.appSrc, 'views'),
-      'reducers': join(paths.appSrc, 'reducers'),
-      'utils': join(paths.appSrc, 'utils'),
-      'helpers': join(paths.appSrc, 'helpers'),
-      'middleware': join(paths.appSrc, 'middleware'),
-      'styles': join(paths.appSrc, 'styles'),
+      actions: join(paths.appSrc, 'actions'),
+      business_logic: join(paths.appSrc, 'business_logic'),
+      constants: join(paths.appSrc, 'constants'),
+      containers: join(paths.appSrc, 'containers'),
+      components: join(paths.appSrc, 'components'),
+      views: join(paths.appSrc, 'views'),
+      reducers: join(paths.appSrc, 'reducers'),
+      utils: join(paths.appSrc, 'utils'),
+      helpers: join(paths.appSrc, 'helpers'),
+      middleware: join(paths.appSrc, 'middleware'),
+      styles: join(paths.appSrc, 'styles'),
+      routes: join(paths.appSrc, 'routes'),
+      selectors: join(paths.appSrc, 'selectors'),
       // @remove-on-eject-begin
       // Resolve Babel runtime relative to react-scripts.
       // It usually still works on npm 3 without this but it would be
@@ -211,7 +213,7 @@ module.exports = {
                 options: {
                   modules: true,
                   importLoaders: 1,
-                  localIdentName: '[name]__[local]___[hash:base64:5]'
+                  localIdentName: '[name]__[local]___[hash:base64:5]',
                 },
               },
               {

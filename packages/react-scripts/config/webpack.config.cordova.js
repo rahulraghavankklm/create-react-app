@@ -114,6 +114,8 @@ module.exports = {
       helpers: join(paths.appSrc, 'helpers'),
       middleware: join(paths.appSrc, 'middleware'),
       styles: join(paths.appSrc, 'styles'),
+      routes: join(paths.appSrc, 'routes'),
+      selectors: join(paths.appSrc, 'selectors'),
       // @remove-on-eject-begin
       // Resolve Babel runtime relative to react-scripts.
       // It usually still works on npm 3 without this but it would be
