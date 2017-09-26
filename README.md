@@ -191,7 +191,7 @@ Some features are currently **not supported**:
 
 * Server rendering.
 * Some experimental syntax extensions (e.g. decorators).
-* CSS Modules.
+* CSS Modules (see [#2285](https://github.com/facebookincubator/create-react-app/pull/2285)).
 * Importing LESS or Sass directly ([but you still can use them](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md#adding-a-css-preprocessor-sass-less-etc)).
 * Hot reloading of components.
 
@@ -239,6 +239,7 @@ Some of the more popular and actively maintained ones are:
 * [NYTimes/kyt](https://github.com/NYTimes/kyt)
 * [zeit/next.js](https://github.com/zeit/next.js)
 * [gatsbyjs/gatsby](https://github.com/gatsbyjs/gatsby)
+* [electrode-io/electrode](https://github.com/electrode-io/electrode)
 
 Notable alternatives also include:
 
