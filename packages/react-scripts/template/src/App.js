@@ -5,12 +5,12 @@ import styles from './App.css';
 class App extends Component {
   render() {
     return (
-      <div className={styles.App}>
-        <div className={styles.AppHeader}>
-          <img src={logo} className={styles.AppLogo} alt="logo" />
-          <h2>Count10 - React Custom Scripts</h2>
-        </div>
-        <p className={styles.AppIntro}>
+      <div className="App">
+        <header className="App-header">
+          <img src={logo} className="App-logo" alt="logo" />
+          <h1 className="App-title">Count10 - React Custom Scripts</h1>
+        </header>
+        <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
       </div>
