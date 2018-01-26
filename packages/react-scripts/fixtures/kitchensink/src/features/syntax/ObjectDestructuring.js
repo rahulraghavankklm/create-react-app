@@ -39,13 +39,11 @@ export default class extends Component {
   render() {
     return (
       <div id="feature-object-destructuring">
-        {this.state.users.map(user => {
-          const { id, name } = user;
-          return (
-            <div key={id}>
-              {name}
-            </div>
-          );
+        {this.state.users.map(user =>
+          const { id, ...rest } = user;
+          // eslint-disable-next-line no-unused-vars
+          const [{ name, ...innerRest }] = [{ ...rest }];
+          return <div key={id}>{name}</div>;
         })}
       </div>
     );
