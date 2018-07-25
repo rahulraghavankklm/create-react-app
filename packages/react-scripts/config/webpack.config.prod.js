@@ -337,11 +337,16 @@ module.exports = {
     // and stored in cache for later use.
     new webpack.optimize.CommonsChunkPlugin({
       children: true,
-      minChunks: 3,
+      minChunks: 2,
     }),
     new webpack.optimize.CommonsChunkPlugin({
       async: true,
+      minChunks: 2,
       children: true,
+    }),
+    new webpack.optimize.LimitChunkCountPlugin({
+      maxChunks: 20, // Must be greater than or equal to one
+      minChunkSize: 1000,
     }),
     // Makes some environment variables available to the JS code, for example:
     // if (process.env.NODE_ENV === 'production') { ... }. See `./env.js`.
