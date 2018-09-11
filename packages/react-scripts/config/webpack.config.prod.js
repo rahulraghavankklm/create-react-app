@@ -344,8 +344,11 @@ module.exports = {
       minChunks: 2,
       children: true,
     }),
+    new webpack.optimize.MinChunkSizePlugin({
+      minChunkSize: 1000, // Minimum number of characters
+    }),
     new webpack.optimize.LimitChunkCountPlugin({
-      maxChunks: 20, // Must be greater than or equal to one
+      maxChunks: 15, // Must be greater than or equal to one
       minChunkSize: 1000,
     }),
     // Makes some environment variables available to the JS code, for example:
