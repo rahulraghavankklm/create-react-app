@@ -349,10 +349,10 @@ module.exports = {
     new webpack.optimize.MinChunkSizePlugin({
       minChunkSize: 1000, // Minimum number of characters
     }),
-    new webpack.optimize.LimitChunkCountPlugin({
-      maxChunks: 15, // Must be greater than or equal to one
-      minChunkSize: 1000,
-    }),
+    // new webpack.optimize.LimitChunkCountPlugin({
+    //   maxChunks: 15, // Must be greater than or equal to one
+    //   minChunkSize: 1000,
+    // }),
     // Makes some environment variables available to the JS code, for example:
     // if (process.env.NODE_ENV === 'production') { ... }. See `./env.js`.
     // It is absolutely essential that NODE_ENV was set to production here.
